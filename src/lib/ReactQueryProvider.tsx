@@ -1,20 +1,31 @@
-// src/lib/ReactQueryProvider.tsx
 'use client';
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider, HydrationBoundary, DehydratedState } from '@tanstack/react-query';
 import { ReactNode, useState } from 'react';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
-type nodeChildren = {
-children: ReactNode
+type Props = {
+    children: ReactNode;
+    dehydratedState?: DehydratedState | null;
 }
 
-export default function ReactQueryProvider({ children }: nodeChildren ) {
-    // Én queryClient pr. klient (laves i useState for at undgå nyt instance på hver render)
-    const [queryClient] = useState(() => new QueryClient());
+export default function ReactQueryProvider({ children, dehydratedState }: Props) {
+    const [queryClient] = useState(() => new QueryClient({
+        defaultOptions: {
+            queries: {
+                staleTime: 1000 * 60 * 5,
+                refetchOnMount: false,
+                refetchOnWindowFocus: false,
+            },
+        },
+    }));
 
-    return <QueryClientProvider client={queryClient}>
-        {children}
-        <ReactQueryDevtools initialIsOpen={false} /> {/* Devtools nederst til højre */}
-        </QueryClientProvider>;
+    return (
+        <QueryClientProvider client={queryClient}>
+            <HydrationBoundary state={dehydratedState}>
+                {children}
+            </HydrationBoundary>
+            <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
+    );
 }
