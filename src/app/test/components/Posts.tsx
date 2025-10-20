@@ -3,16 +3,21 @@
 import { useQuery } from '@tanstack/react-query';
 import { getPosts } from '@/services/data';
 import Link from 'next/link';
+import { useEffect } from 'react';
 
 export default function Posts() {
 
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, error, status } = useQuery({
     queryKey: ['mydata'],
     queryFn: getPosts, // eller getPosts hvis client-kompatibel
     staleTime: 1000 * 60 * 5, // valgfrit - matcher providerens default
     refetchOnMount: false,
     refetchOnWindowFocus: false,
   });
+
+  useEffect(() => {
+    console.log('Posts useQuery status:', status);
+  }, [status]);
 
   if (isLoading) return <p>Loading...</p>;
 

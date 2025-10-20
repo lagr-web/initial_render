@@ -11,7 +11,7 @@ export default function GetMorePosts() {
 const { data, isLoading } = useQuery({
   queryKey: ['mydata'],
   queryFn: getPosts,
-  staleTime: 1000 * 60 * 5,
+  //staleTime: 1000 * 60 * 5,
   refetchOnMount: false,
   refetchOnWindowFocus: false,
 });

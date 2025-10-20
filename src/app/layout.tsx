@@ -8,7 +8,12 @@ import { getPosts } from '../services/data'; // eller prefetche flere queries
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
 
   const queryClient = new QueryClient();
-  await queryClient.prefetchQuery({ queryKey: ['mydata'], queryFn: getPosts });
+  
+  await queryClient.prefetchQuery({ 
+    queryKey: ['mydata'],
+    queryFn: getPosts
+   });
+
   const dehydratedState = dehydrate(queryClient);
 
   return (

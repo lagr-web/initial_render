@@ -1,7 +1,7 @@
 'use client';
 
 import { QueryClient, QueryClientProvider, HydrationBoundary, DehydratedState } from '@tanstack/react-query';
-import { ReactNode, useState } from 'react';
+import { ReactNode, useState, useEffect } from 'react';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 type Props = {
@@ -19,6 +19,11 @@ export default function ReactQueryProvider({ children, dehydratedState }: Props)
             },
         },
     }));
+
+    useEffect(() => {
+        console.log('ReactQueryProvider: dehydratedState present?', !!dehydratedState);
+        console.log('QueryClient cache keys:', queryClient.getQueryCache().getAll().map(q => q.queryKey));
+    }, [dehydratedState, queryClient]);
 
     return (
         <QueryClientProvider client={queryClient}>

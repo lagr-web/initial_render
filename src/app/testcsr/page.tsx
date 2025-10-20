@@ -17,7 +17,6 @@ const Page = ()=> {
 
     return (
 
-
         data.map((n: any) => (
 
             <div key={n.id}>{n.title}</div>
